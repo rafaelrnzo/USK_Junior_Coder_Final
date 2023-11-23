@@ -145,7 +145,7 @@ const CartPage = ({ navigation, route }) => {
       }
     );
     getDataHistory();
-    navigation.navigate("HomeUser", { getDataSiswaCallBack: seconds });
+    navigation.navigate("MainUser", { getDataSiswaCallBack: seconds });
   };
 
   useEffect(() => {
@@ -174,22 +174,20 @@ const CartPage = ({ navigation, route }) => {
                 <Text className="text-lg font-bold">Cart</Text>
               </View>
               <View className="flex-row flex items-center">
-                <TouchableOpacity onPress={() => {onRefresh}}>
+                <TouchableOpacity onPress={() => { onRefresh }}>
                   <MaterialCommunityIcons name="refresh" color='black' size={28} />
                 </TouchableOpacity>
               </View>
             </View>
             <View className="p-3">
               <View className="bg-blue-600 p-4 rounded-lg flex flex-row justify-between items-center ">
-                {/* <Text className="text-white text-lg ">Hello, Rafael Lorenzo</Text> */}
                 <View className="gap-0">
                   <Text className="text-slate-200 ">Total</Text>
                   <Text className="text-white font-bold text-lg">Rp{dataHistory.totalPrice}</Text>
                 </View>
                 <View className="gap-0 flex-row flex">
-                  <TouchableOpacity onPress={() => navigation.navigate('TopUp')} className="px-4 p-1.5 bg-white rounded-lg">
-                    <Text className="text-blue-600 font-semibold text-base">Payment</Text>
-                    {/* <MaterialCommunityIcons name="credit-card-plus" color='#2563EB' size={32} /> */}
+                  <TouchableOpacity onPress={payProduct} className="px-4 p-1.5 bg-white rounded-lg">
+                    <Text className="text-blue-600 font-semibold text-base px-4">Buy</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -206,15 +204,30 @@ const CartPage = ({ navigation, route }) => {
               renderItem={({ item, index }) => (
                 <View
                   key={index}
-                  className="flex flex-row justify-between items-center border border-gray-300 rounded-lg p-3 mb-3"
+                  className="flex flex-row justify-between items-center border border-slate-200 rounded-lg p-3 mb-3"
                 >
-                  <Text>
-                    {item.products.name} | rp{item.price} | {item.quantity}x
-                  </Text>
-                  <Button title=" X " onPress={() => cancelCart(item.id)} />
+                  <View className="flex flex-row gap-3 items-center">
+
+                    <View className="p-1.5 px-3 rounded-lg` border border-slate-200 ">
+                      <Text className="text-lg">
+                        {item.quantity}x
+                      </Text>
+                    </View>
+                    <View>
+                      <Text className="text-base  text-black">
+                        {item.products.name}
+                      </Text>
+                      <Text className="text-lg text-blue-600 font-bold">
+                        rp{item.price}
+                      </Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity className="bg-blue-600 p-2 rounded-full" onPress={() => cancelCart(item.id)} >
+                    <MaterialCommunityIcons name="delete" color="white" size={20} />
+                  </TouchableOpacity>
                 </View>
               )}
-            /> 
+            />
             {dataHistory.totalPrice > dataHistory.difference ? (
               <Text>Saldo mu kurang, saldo kamu: {dataHistory.difference}</Text>
             ) : (

@@ -23,7 +23,7 @@ const ProductCanteen = ({ route, navigation }) => {
   const [dataKantin, setdataKantin] = useState([]);
   const { successCreate, successEdit } = route.params || {};
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const heightHeader = 90;
 
   const deleteProduct = async (id) => {
@@ -64,7 +64,7 @@ const ProductCanteen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView className="h-full bg-white">
-      <ScrollView className="flex h-auto">
+      <View className="flex h-auto">
         <View className="text-2xl mt-8 w-full p-3 py-4 border-b border-slate-300 flex flex-row justify-between items-center bg-white align-middle " >
           <Text className="font-bold text-lg">Product List</Text>
           <View className="flex flex-row gap-3">
@@ -81,39 +81,47 @@ const ProductCanteen = ({ route, navigation }) => {
             <Text>2 Product</Text>
           </View>
           {/* <View className=""> */}
-          <FlatList
-            data={dataKantin.products}
-            renderItem={({ item, index }) => (
-              <ProductList
-                key={index}
-                name={item.name}
-                // photo={`http://10.10.18.123:8000${item.photo}`}
-                // desc={item.desc}
-                price={item.price}
-                // stand={item.stand}
-                // role={roleAuth}
-                stock={item.stock}
-                id={item.id}
-                navigation={navigation}
-                deleteProduct={deleteProduct}
-              />
-            )}
-          />
+          <View>
+
+            <FlatList
+              numColumns={1}
+              keyExtractor={(item) => item.key}
+              data={dataKantin.products}
+              renderItem={({ item, index }) => (
+                <ProductList
+                  key={index}
+                  name={item.name}
+                  photo={item.photo}
+                  // desc={item.desc}
+                  price={item.price}
+                  stand={item.stand}
+                  // role={roleAuth}
+                  stock={item.stock}
+                  id={item.id}
+                  navigation={navigation}
+                  deleteProduct={deleteProduct}
+                />
+              )}
+            />
+          </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
 
 const ProductList = ({
-  name, price, stock, deleteProduct, id, navigation
+  name, price, stock, deleteProduct, id, navigation, photo,stand
 }) => {
   // const navigation = NativeScreenNavigationContainer()
   return (
     <View className="flex p-3 py-3 gap-3 border-b-8 border-slate-200">
       <View className="flex-row flex ">
-        <View className="bg-blue-600 rounded-lg p-5 px-7 mr-3 basis-auto">
-          <MaterialCommunityIcons name="photo" color='white' size={24} />
+        <View className="bg-blue-600 rounded-lg p-5 px-8 mr-3 basis-auto">
+          <Image
+          className="h-auto w-auto"
+            source={{ uri: photo }}
+          />
         </View>
         <View className="flex justify-between basis-auto ">
           <View className="flex ">
@@ -142,5 +150,7 @@ const ProductList = ({
     </View>
   )
 }
+
+
 
 export default ProductCanteen;

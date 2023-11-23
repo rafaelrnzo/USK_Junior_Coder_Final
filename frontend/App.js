@@ -12,14 +12,15 @@ import SignInPage from './screen/auth/SIgnIn';
 import LoginPage from './screen/auth/Login';
 import HomeUser from './screen/user/HomeUser';
 import MainCanteen from './screen/canteen/MainCanteen';
-import MainBank from './screen/bank/MainBank';
 import CreateProduct from './screen/canteen/CreateProduct';
 import MainAdmin from './screen/admin/MainAdmin';
-import CreateUser from './screen/admin/userAction/CreateUser';
 import EditProduct from './screen/canteen/EditProduct';
+import EditCategory from './screen/admin/categoryAction/EditCategory';
+import MainBank from './screen/bank/MainBank';
+import Withdraw from './screen/bank/Withdraw';
+import CreateUser from './screen/admin/userAction/CreateUser';
 import EditUser from './screen/admin/userAction/EditUser';
 import CreateCategory from './screen/admin/categoryAction/CreateCategory';
-import EditCategory from './screen/admin/categoryAction/EditCategory';
 
 
 const App = () => {
@@ -71,6 +72,9 @@ const App = () => {
           {/* User */}
           <Stack.Screen name="Home" component={HomeUser} />
           <Stack.Screen name="TopUp" component={TopUp} />
+          
+          {/* Bank */}
+          <Stack.Screen name="Withdraw" component={Withdraw} />
 
           {/* Product */}
           <Stack.Screen name="CreateProduct" component={CreateProduct} />

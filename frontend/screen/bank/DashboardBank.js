@@ -9,6 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const HomeBank = ({ navigation }) => {
   const [loading, setloading] = useState(true);
   const [dataBank, setdataBank] = useState([]);
+  const [refreshing, setRefreshing] = useState([]);
 
   const getDataBank = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -21,7 +22,14 @@ const HomeBank = ({ navigation }) => {
     setloading(false);
   };
 
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getDataBank ();
+  };
+
   useEffect(() => {
+    setRefreshing(true);
     getDataBank();
   }, []);
 
@@ -43,10 +51,13 @@ const HomeBank = ({ navigation }) => {
   return (
     <SafeAreaView className="h-full bg-white">
       {loading ? <Text>Loading...</Text> :
-        <ScrollView className="flex h-auto">
+        <View className="flex h-auto">
           <View className="text-2xl w-full p-3 py-4 border-b border-slate-300 flex flex-row justify-between items-center bg-white align-middle" >
             <Text className="text-lg font-bold">Bank</Text>
             <View className="flex flex-row gap-3">
+              <TouchableOpacity onPress={onRefresh}>
+                <MaterialCommunityIcons name="refresh" color='black' size={24} />
+              </TouchableOpacity>
               <TouchableOpacity onPress={logout}>
                 <MaterialCommunityIcons name="logout" color='black' size={24} />
               </TouchableOpacity>
@@ -57,11 +68,14 @@ const HomeBank = ({ navigation }) => {
           </View>
           <View className=" py-0 flex p-3 justify-between ">
             <View className="flex flex-row gap-3 justify-between mb-3">
-              <View className="bg-white flex-1 p-3 py-4 border border-slate-200 rounded-lg">
+              <View className="bg-white flex-row flex-1 p-3 py-4 border border-slate-200 rounded-lg justify-between items-center">
                 <View className="gap-0">
                   <Text className="text-slate-800 ">Balance Total</Text>
                   <Text className="text-black font-bold text-lg">Rp{dataBank.balanceBank}</Text>
                 </View>
+                <TouchableOpacity className="gap-0 bg-blue-600 p-1.5 rounded-lg" onPress={() => { navigation.navigate('Withdraw') }}>
+                  <MaterialCommunityIcons name="cash-refund" color='white' size={24} />
+                </TouchableOpacity>
               </View>
               <View className="bg-white flex-1 p-3 py-4 border border-slate-200 rounded-lg">
                 <View className="gap-0">
@@ -74,7 +88,7 @@ const HomeBank = ({ navigation }) => {
               <View className="bg-white flex-1 p-3 py-4 border border-slate-200 rounded-lg">
                 <View className="gap-0">
                   <Text className="text-slate-800 ">Total Wallet</Text>
-                  <Text className="text-black font-bold text-lg">{dataBank.walletCount || ''}</Text>
+                  <Text className="text-black font-bold text-lg">{dataBank.balanceBank || ''}</Text>
                 </View>
               </View>
               <View className="bg-white flex-1 p-3 py-4 border border-slate-200 rounded-lg">
@@ -85,7 +99,36 @@ const HomeBank = ({ navigation }) => {
               </View>
             </View>
           </View>
-        </ScrollView>
+          <View>
+            <Text className="font-bold text-lg px-3">History</Text>
+          </View>
+          <FlatList
+            keyExtractor={(item) => item.id.toString()}
+            data={dataBank.wallets}
+            renderItem={({ item, index }) => (
+              <View className="border-b border-slate-200 p-4 rounded-lg flex flex-row justify-between items-center ">
+                <View className="flex flex-row gap-2 items-center">
+                  <View className="gap-0 flex-row flex">
+                    <TouchableOpacity onPress={() => { }} className="p-3 border border-slate-200 rounded-lg">
+                      <MaterialCommunityIcons name="credit-card-plus" color='#2563EB' size={32} />
+                    </TouchableOpacity>
+                  </View>
+                  <View className="gap-0">
+                    <Text className="text-black font-bold text-lg">Top Up</Text>
+                    <Text className="text-black ">{item.user.name}</Text>
+                    <Text className="text-black ">{item.created_at}</Text>
+                  </View>
+                </View>
+                <View className="gap-0 flex-row flex">
+                  <View className="gap-0">
+                    <Text className="text-black font-semibold text-base">Rp{item.credit}</Text>
+                  </View>
+
+                </View>
+              </View>
+            )}
+          />
+        </View>
       }
     </SafeAreaView>
   );

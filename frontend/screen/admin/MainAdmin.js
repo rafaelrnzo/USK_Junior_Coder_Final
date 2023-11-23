@@ -2,6 +2,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardAdmin from './DashboardAdmin';
 import CategoryPage from './CategoryAdmin';
+import HistoryAdmin from './HistoryAdmin';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -33,16 +34,16 @@ function MainAdmin() {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="Top Up"
-        component={TopUpListPage}
+      <Tab.Screen
+        name="History Admin"
+        component={HistoryAdmin}
         options={{
-          tabBarLabel: 'TopUp',
+          tabBarLabel: 'History',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="card-plus" color={color} size={26} />
+            <MaterialCommunityIcons name="history" color={color} size={26} />
           ),
         }}
-      /> */}
+      />
 
     </Tab.Navigator>
   );

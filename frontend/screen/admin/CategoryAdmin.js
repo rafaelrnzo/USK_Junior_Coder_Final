@@ -84,8 +84,9 @@ const CategoryPage = ({ navigation, route }) => {
                         <MaterialCommunityIcons name="delete" color='black' size={24} />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() =>
-                        navigation.navigate("EditUser", {
-                          id: item.id,
+                        navigation.navigate("EditCategory", {
+                          pid: item.id,
+                          pname: item.name,
                         })
                       }>
                         <MaterialCommunityIcons name="pencil" color='black' size={24} />

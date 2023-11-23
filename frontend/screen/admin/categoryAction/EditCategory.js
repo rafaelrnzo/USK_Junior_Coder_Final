@@ -3,51 +3,46 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
-import { API_BASE_URL } from "../../constantApi";
 import { textInputStyle } from "../../../assets/style/basic";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { API_BASE_URL } from "../../constantApi";
 
 
 const EditCategory = ({ navigation, route }) => {
   const [name, setname] = useState("");
-  const [password, setpassword] = useState("");
-  const [roles, setroles] = useState([]);
-  const [selectedRole, setselectedRole] = useState(0);
-  const { id } = route.params;
-  const currentTime = new Date();
-  const seconds = currentTime.getSeconds();
+  const [category, setCategory] = useState("");
+  const [id, setid] = useState(0);
+  const { pid } = route.params;
+  const { pname } = route.params;
 
-  const getUserAndRoles = async () => {
+  const getNameCategory = async () => {
     const token = await AsyncStorage.getItem("token");
-    const response = await axios.get(`${API_BASE_URL}user-admin-edit/${id}`, {
+    const response = await axios.get(`${API_BASE_URL}category-admin-edit/${pid}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    setroles(response.data.roles);
-    setname(response.data.user.name);
-    setselectedRole(response.data.user.roles_id);
+    setCategory(response.data?.data.name);
   };
 
   const EditCategory = async () => {
     const token = await AsyncStorage.getItem("token");
     await axios.put(
-      `${API_BASE_URL}user-admin-update/${id}`,
+      `${API_BASE_URL}category-admin-update/${pid}`,
       {
         name: name,
-        password: password,
-        roles_id: selectedRole,
       },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     navigation.navigate("MainAdmin", {
-      userEdit: seconds,
+      editCategoryCallback: name,
     });
   };
 
   useEffect(() => {
-    getUserAndRoles();
+    setname(pname)
+    getNameCategory();
   }, []);
 
   return (
@@ -58,7 +53,7 @@ const EditCategory = ({ navigation, route }) => {
             <TouchableOpacity onPress={() => navigation.navigate('MainAdmin')}>
               <MaterialCommunityIcons name="chevron-left" color='black' size={32} />
             </TouchableOpacity>
-            <Text className="text-lg font-bold">Edit User</Text>
+            <Text className="text-lg font-bold">Edit Category</Text>
           </View>
           <View className="flex-row flex items-center">
             <TouchableOpacity onPress={EditCategory}>
@@ -72,9 +67,8 @@ const EditCategory = ({ navigation, route }) => {
             <TextInput
               value={name}
               onChangeText={(e) => setname(e)}
-              placeholder="name"
+              placeholder={pname}
               className={`${textInputStyle}`}
-
             />
           </View>
         </View>

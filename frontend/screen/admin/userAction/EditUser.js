@@ -11,27 +11,43 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const EditUser = ({ navigation, route }) => {
   const [name, setname] = useState("");
-  const [id, setid] = useState(0);
-  const { pid } = route.params;
-  const { pname } = route.params;
+  const [password, setpassword] = useState("");
+  const [roles, setroles] = useState([]);
+  const [selectedRole, setselectedRole] = useState(0);
+  const { id } = route.params;
+  const currentTime = new Date();
+  const seconds = currentTime.getSeconds();
 
-  const editCategory = async () => {
+  const getUserAndRoles = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const response = await axios.get(`${API_BASE_URL}user-admin-edit/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setroles(response.data.roles);
+    setname(response.data.user.name);
+    setselectedRole(response.data.user.roles_id);
+  };
+
+  const EditUser = async () => {
     const token = await AsyncStorage.getItem("token");
     await axios.put(
-      `${API_BASE_URL}category-admin-update/${id}`,
+      `${API_BASE_URL}user-admin-update/${id}`,
       {
         name: name,
+        password: password,
+        roles_id: selectedRole,
       },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     navigation.navigate("MainAdmin", {
-      editCategoryCallback: name,
+      userEdit: seconds,
     });
   };
 
   useEffect(() => {
-    setname(pname);
-    setid(pid);
+    getUserAndRoles();
   }, []);
 
   return (
@@ -45,7 +61,7 @@ const EditUser = ({ navigation, route }) => {
             <Text className="text-lg font-bold">Edit User</Text>
           </View>
           <View className="flex-row flex items-center">
-            <TouchableOpacity onPress={editCategory}>
+            <TouchableOpacity onPress={EditUser}>
               <Text className="text-base text-blue-600 font-bold ">Save</Text>
             </TouchableOpacity>
           </View>
@@ -60,6 +76,23 @@ const EditUser = ({ navigation, route }) => {
               className={`${textInputStyle}`}
 
             />
+            <Text className="font-bold text-base">Password</Text>
+            <TextInput
+              value={password}
+              onChangeText={(e) => setpassword(e)}
+              placeholder="password"
+              className={`${textInputStyle}`}
+
+            />
+            <Text className="font-bold text-base">Role</Text>
+            <Picker
+              selectedValue={selectedRole}
+              onValueChange={(e) => setselectedRole(e)}
+            >
+              {roles.map((value, index) => (
+                <Picker.Item label={value.name} value={value.id} key={index} />
+              ))}
+            </Picker>
           </View>
         </View>
       </ScrollView>

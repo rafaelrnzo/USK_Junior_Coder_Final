@@ -11,6 +11,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const TopUpListPage = () => {
   const [loading, setloading] = useState(true);
   const [dataBank, setdataBank] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getDataBank = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -29,7 +30,7 @@ const TopUpListPage = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    getDataKantin();
+    getDataBank();
   };
 
   const acceptTopUp = async (id) => {
@@ -48,11 +49,8 @@ const TopUpListPage = () => {
         loading ? <Text>Loading</Text> :
           <ScrollView className="flex h-auto">
             <View className="text-2xl  w-full p-3 py-4 border-b border-slate-300 flex flex-row justify-between items-center bg-white align-middle " >
-              <Text className="font-bold text-lg">Product List</Text>
+              <Text className="font-bold text-lg">Top Up List</Text>
               <View className="flex flex-row gap-3">
-                <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
-                  <MaterialCommunityIcons name="plus" color='black' size={24} />
-                </TouchableOpacity>
                 <TouchableOpacity onPress={onRefresh}>
                   <MaterialCommunityIcons name="refresh" color='black' size={24} />
                 </TouchableOpacity>

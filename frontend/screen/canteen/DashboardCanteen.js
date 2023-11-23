@@ -17,8 +17,10 @@ import { API_BASE_URL } from '../constantApi';
 
 const DashboardCanteenPage = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const gap = 12
+  const [transactionKantin, settransactionKantin] = useState([]);
 
   const getDataKantin = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -32,6 +34,23 @@ const DashboardCanteenPage = ({ navigation }) => {
     setData(response.data);
     setLoading(false)
   };
+
+  const getTransactionKantin = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const response = await axios.get(`${API_BASE_URL}transaction-kantin`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.data);
+    settransactionKantin(response.data);
+  };
+
+  const onRefresh = () => {
+    setRefresh(true)
+    getDataKantin();
+  }
+
 
   const logout = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -49,6 +68,7 @@ const DashboardCanteenPage = ({ navigation }) => {
   };
 
   useEffect(() => {
+    getTransactionKantin();
     getDataKantin();
   }, []);
 
@@ -60,6 +80,9 @@ const DashboardCanteenPage = ({ navigation }) => {
             <Text className="text-lg font-bold">Canteen</Text>
             <View className="flex flex-row gap-3">
 
+              <TouchableOpacity onPress={onRefresh}>
+                <MaterialCommunityIcons name="refresh" color='black' size={24} />
+              </TouchableOpacity>
               <TouchableOpacity onPress={logout}>
                 <MaterialCommunityIcons name="logout" color='black' size={24} />
               </TouchableOpacity>
@@ -99,14 +122,42 @@ const DashboardCanteenPage = ({ navigation }) => {
               </View>
             </View>
           </View>
-          <View style={styles.app} className=" px-3">
-            {/* {data.map((item) => (
-            <CardProduct key={item.id} image={item.photo} name={item.name} desc={item.stock} price={item.price} />
-          ))} */}
-
-
-
+          <View>
+            <Text className="font-bold text-lg px-3">History</Text>
           </View>
+          {transactionKantin.transactions.map((item, index) => item.status === 'diambil' ? (
+            <View
+              className="flex flex-row justify-between items-center px-3 my-3 mb-2"
+              key={index}
+            >
+              <View className="flex flex-row justify-between w-full border border-slate-200 p-3 items-center align-middle rounded-lg">
+                <View className="p-2 bg-blue-600 rounded-lg">
+
+                  <MaterialCommunityIcons name="cash-plus" color='white' size={32} />
+                </View>
+                <View>
+                  <Text className="text-base font-bold">Rp{item.price}</Text>
+                  <View className="flex flex-row items-center align-middle justify-center">
+                    {
+                      item.user_transactions.map((val, ind) => (
+                        <Text key={ind} className="text-base">{val.name} |</Text>
+                      ))
+                    }
+                    <Text className="text-xs text-slate-800"> {item.order_code}</Text>
+                  </View>
+                </View>
+                <Text>{item.quantity}x </Text>
+                <Text>{item.status} </Text>
+                {item.status === "dibayar" ? (
+                  <TouchableOpacity onPress={() => verifPengambilan(item.id)} className="p-1 rounded-full bg-blue-600">
+                    <MaterialCommunityIcons name="check" color='white' size={20} />
+                  </TouchableOpacity>
+                ) : (
+                  <MaterialCommunityIcons name="check" color='black' size={28} />
+                )}
+              </View>
+            </View>
+          ) : null)}
         </ScrollView>
       }
     </SafeAreaView>
