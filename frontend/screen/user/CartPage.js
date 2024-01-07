@@ -231,7 +231,8 @@ const CartPage = ({ navigation, route }) => {
             {dataHistory.totalPrice > dataHistory.difference ? (
               <Text>Saldo mu kurang, saldo kamu: {dataHistory.difference}</Text>
             ) : (
-              <Button title="buy" onPress={payProduct} />
+              null
+              // <Button title="buy" onPress={payProduct} />
             )}
           </View>
         </ScrollView>

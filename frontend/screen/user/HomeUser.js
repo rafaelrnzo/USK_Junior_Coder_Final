@@ -115,7 +115,7 @@ const HomeUser = ({ navigation, route }) => {
                   key={index}
                   name={item.name}
                   desc={item.desc}
-                  photo={`http://192.168.1.4:8000${item.photo}`}
+                  photo={`http://192.168.1.5:8000${item.photo}`}
                   price={item.price}
                   role={roleAuth}
                   stand={item.stand}

@@ -51,7 +51,7 @@ const OrderPage = () => {
         loading ? <Text>Loading</Text> :
           <ScrollView className="flex h-auto">
             <View className="text-2xl  w-full p-3 py-4 border-b border-slate-300 flex flex-row justify-between items-center bg-white align-middle " >
-              <Text className="font-bold text-lg">Product List</Text>
+              <Text className="font-bold text-lg">Order List</Text>
               <View className="flex flex-row gap-3">
                 <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
                   <MaterialCommunityIcons name="plus" color='black' size={24} />

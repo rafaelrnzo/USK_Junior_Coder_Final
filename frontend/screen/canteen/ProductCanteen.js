@@ -91,7 +91,7 @@ const ProductCanteen = ({ route, navigation }) => {
                 <ProductList
                   key={index}
                   name={item.name}
-                  photo={item.photo}
+                  photo={`http://192.168.1.5:8000${item.photo}`}
                   // desc={item.desc}
                   price={item.price}
                   stand={item.stand}
@@ -111,15 +111,15 @@ const ProductCanteen = ({ route, navigation }) => {
 };
 
 const ProductList = ({
-  name, price, stock, deleteProduct, id, navigation, photo,stand
+  name, price, stock, deleteProduct, id, navigation, photo, stand
 }) => {
   // const navigation = NativeScreenNavigationContainer()
   return (
     <View className="flex p-3 py-3 gap-3 border-b-8 border-slate-200">
       <View className="flex-row flex ">
-        <View className="bg-blue-600 rounded-lg p-5 px-8 mr-3 basis-auto">
+        <View className="bg-blue-600 rounded-lg mr-3 basis-auto">
           <Image
-          className="h-auto w-auto"
+            className="h-20 w-20 rounded-lg"
             source={{ uri: photo }}
           />
         </View>
